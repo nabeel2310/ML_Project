@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "class_manifest_incomplete",
+  "crops": [
+    "Coconut",
+    "Arecanut",
+    "Banana",
+    "Paddy",
+    "Pepper",
+    "Cardamom"
+  ],
+  "expected_total_classes": 31,
+  "classes": [],
+  "notes": [
+    "Populate the exact 31 class names from the approved master specification before training.",
+    "Each class must have a stable id, crop, label, and healthy flag.",
+    "Do not train with an empty class list or silently map labels from unrelated datasets."
+  ]
+}
