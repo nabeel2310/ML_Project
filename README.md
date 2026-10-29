@@ -203,6 +203,54 @@ pip install -r requirements.txt
 
 Copy `.env.example` to `.env` and fill in only the values needed locally. Never commit `.env`, image corpora, model weights, Supabase service-role keys, or database passwords.
 
+
+## Run the PlantVillage baseline
+
+A first runnable image-classification baseline is available at `scripts/train_plantvillage_baseline.py`. It trains an ImageNet-pretrained ResNet-18 on the NewPlantVillage-style folder dataset and writes a checkpoint plus validation/test metrics. This is a **baseline experiment**, not the final six-crop model and not the same architecture as the model in the reference repository.
+
+### Dataset compatibility warning
+
+The reference notebook downloads the Kaggle dataset `koheidozono/newplantvillage` and reports 34 folders/classes, 50,368 training images, and 12,611 validation images after its own 80/20 split. Those figures are notebook output, not a fresh audit of unique source images. The classes mainly cover other crops; they do **not** provide adequate labeled coverage for Coconut, Arecanut, Banana, Paddy/Rice, Black Pepper, and Cardamom. Use this run to validate the training pipeline and learn a general plant-disease baseline, not as a final predictor for the six target crops.
+
+### Download and prepare data
+
+1. Review the dataset's current Kaggle terms/license and make sure your intended use is permitted.
+2. Install/configure the Kaggle CLI using its official documentation. Keep your Kaggle API token outside Git and never paste it into chat.
+3. From the repository root, download and extract the dataset into a directory with one folder per class. For example, if the Kaggle CLI is configured:
+
+```bash
+kaggle datasets download -d koheidozono/newplantvillage -p data/external --unzip
+```
+
+4. Inspect the extracted paths. The script expects a single directory whose immediate children are class folders, e.g. `data/external/newplantvillage/Apple___Apple_scab/*.jpg`. If the archive extracts to a differently named directory, pass the correct path using `--data-dir`. Do not blindly rename class folders or mix labels from different datasets.
+
+### Start training
+
+Run a small smoke test first:
+
+```bash
+python scripts/train_plantvillage_baseline.py --data-dir data/external/newplantvillage --max-images 700 --epochs 1 --batch-size 16
+```
+
+Then train on the full dataset:
+
+```bash
+python scripts/train_plantvillage_baseline.py --data-dir data/external/newplantvillage --epochs 8 --batch-size 32
+```
+
+The script automatically uses CUDA when available and otherwise runs on CPU (which may be slow). It may download pretrained ResNet-18 weights the first time, so ensure the runtime has internet access or pre-cache those weights.
+
+Outputs are written to `outputs/plantvillage_baseline/`:
+- `best_model.pt` — best validation checkpoint and class mapping
+- `metrics.json` — held-out test accuracy, per-class precision/recall/F1, confusion matrix, split counts, and evaluation warning
+- `history.json` — epoch-level train/validation metrics
+
+The script uses a stratified random image split of 80% train, 10% validation, and 10% test. **This split can still leak near-duplicate or same-source images.** Deduplicate/group images by source, plant, and capture session and perform an independent field test before treating the result as real-world accuracy. Do not compare this script's score directly to the reference notebook's 95.84% because the architectures, splits, and evaluation procedures differ.
+
+### What happens next
+
+This baseline does not unblock the final six-crop model by itself. Next, acquire and license-reviewed datasets for all six target crops, approve the exact disease taxonomy, audit labels and duplicates, then train/evaluate using group-based splits. Only after that should this baseline be compared against the planned larger or multimodal architectures.
+
 ## Data manifest
 
 Required/expected fields are described in `data/manifest.example.csv`. Each record should link to a file and its exact approved class, crop, source, split/group metadata, and optional symptom text. Keep data files outside Git and store their provenance in the manifest/registry.
