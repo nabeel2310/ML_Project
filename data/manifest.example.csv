@@ -1,0 +1,2 @@
+image_path,crop,label,symptom_text,source,group_id,split
+data/raw/example.jpg,Coconut,REPLACE_WITH_APPROVED_LABEL,,dataset_name,plant_or_plot_id,
