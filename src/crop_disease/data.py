@@ -48,7 +48,7 @@ def validate_dataset_manifest(csv_path: Path, *, require_files: bool = True) -> 
         raise ManifestError("image_path contains empty values.")
     if (frame["label"].str.strip() == "").any() or (frame["crop"].str.strip() == "").any():
         raise ManifestError("crop and label must be non-empty.")
-    if not set(frame["split"]) <= ALLOWED_SPLITS:
+    if not set(frame["split"]) <= (ALLOWED_SPLITS | {""}):
         raise ManifestError(f"split must be one of {sorted(ALLOWED_SPLITS)}; blank means not yet assigned.")
     if require_files:
         absent = [p for p in frame["image_path"] if not Path(p).is_file()]
