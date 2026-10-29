@@ -44,7 +44,7 @@ The original specification calls for 31 target classes, but the exact class-to-c
 
 ## Supabase
 
-Apply the SQL migration in `supabase/migrations/` using the Supabase SQL Editor or your migration workflow. Row Level Security (RLS) is enabled. Public users cannot read training samples or prediction logs by default. Add narrow policies only after deciding the application's authentication and data-access requirements.
+Project URL configured in `.env.example`: `https://tnvmjahcdovffsgrajkm.supabase.co`. Apply the SQL migration in `supabase/migrations/` to this project using the Supabase SQL Editor or your migration workflow. The provided PostgreSQL connection string contains a password placeholder; replace it only in your local `.env` or a secure secret store, never in GitHub. Row Level Security (RLS) is enabled. Public users cannot read training samples or prediction logs by default. Add narrow policies only after deciding the application's authentication and data-access requirements.
 
 Use publishable/anon keys only where RLS permits. Keep secret/service-role keys server-side in environment variables or deployment secrets. Never paste them into chat or commit them.
 
