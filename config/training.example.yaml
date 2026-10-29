@@ -1,0 +1,41 @@
+# Starting configuration only. Benchmark and tune before full training.
+seed: 42
+experiment_name: crop-disease-baseline
+data:
+  manifest: data/manifest.csv
+  class_manifest: config/crop_classes.json
+  image_size: 224
+  num_workers: 4
+  verify_files: true
+  require_grouped_splits: true
+model:
+  architecture: convnext_tiny
+  pretrained: true
+  num_classes: 31 # Must match the approved class manifest
+  use_text: false
+training:
+  epochs: 30
+  batch_size: 16
+  gradient_accumulation_steps: 2
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  label_smoothing: 0.05
+  mixed_precision: true
+  gradient_clip_norm: 1.0
+  early_stopping_patience: 6
+  checkpoint_dir: outputs/checkpoints
+evaluation:
+  validation_split: validation
+  locked_test_split: test
+  metrics: [accuracy, balanced_accuracy, macro_f1, per_class_precision_recall_f1, confusion_matrix, calibration]
+tracking:
+  backend: tensorboard
+  output_dir: outputs/experiments
+cloud:
+  persistent_checkpoint_uri: "" # Configure cloud object storage separately
+  max_budget_usd: 0 # Set an explicit positive budget before a paid run
+  auto_shutdown: true
+notes:
+  - This config is a planning template; the training CLI must validate it before use.
+  - Never train until class_manifest and dataset manifest pass audit.
+  - Start with a single backbone and small image size; scale after benchmarking.
