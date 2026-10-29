@@ -1,5 +1,6 @@
-import torch
+import pytest
 
+torch = pytest.importorskip("torch")
 from src.crop_disease.losses import supervised_contrastive_loss
 
 
