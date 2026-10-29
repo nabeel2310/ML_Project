@@ -1,0 +1,6 @@
+source_id,source_name,canonical_url,paper_or_doi,license,license_review_status,access_date,crops,labels,image_count,geography,capture_setting,annotation_method,checksum,include_status,notes
+plantvillage,PlantVillage,https://github.com/spMohanty/PlantVillage-Dataset,,,,,,,,,,,,review_required,Check exact license and target crop coverage
+plantdoc,PlantDoc,https://github.com/pratikkayal/PlantDoc-Dataset,,,,,,,,,,,,review_required,Check license and annotation quality
+paddy_doctor,Paddy Doctor,https://www.kaggle.com/competitions/paddy-disease-classification,,,,,,,,,,,,review_required,Competition terms apply
+plant_pathology_2020,Plant Pathology 2020,https://www.kaggle.com/c/plant-pathology-2020-fgvc7,,,,,,,,,,,,review_required,Apple-only; possible pretraining/benchmark only
+plant_pathology_2021,Plant Pathology 2021,https://www.kaggle.com/c/plant-pathology-2021-fgvc8,,,,,,,,,,,,review_required,Apple-only; possible pretraining/benchmark only
